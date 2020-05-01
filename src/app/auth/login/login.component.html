@@ -44,12 +44,12 @@
       *ngIf="password.invalid && password.touched"
     >
       <span *ngIf="password.errors.required">Password can not be empty</span>
-      <span *ngIf="password.errors.minlength">
+      <span *ngIf="password.errors.minlength && password.errors.minlength.requiredLength">
         Password should be at least
-        {{password.errors.minlength.requiredLength}}
+        {{ password.errors.minlength.requiredLength }}
         symbols.
         You entered only
-        {{password.errors.minlength.actualLength}}
+        {{ password.errors.minlength.actualLength }}
       </span>
     </span>
   </div>

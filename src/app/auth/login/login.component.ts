@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from "@angular/router";
+import {ActivatedRoute, Params, Router} from "@angular/router";
 
 import { UserService } from "../../shared/services/user.service";
 import { User } from "../../shared/models/user.model";
@@ -27,10 +27,16 @@ export class LoginComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+    this.route.queryParams.subscribe((params: Params) => {
+      if (params['canLoginNow']) {
+        this.getMessage('You can login now', 'success');
+      }
+    });
     this.loginForm = new FormGroup({
       'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, [Validators.required, Validators.minLength(6)])
@@ -38,12 +44,9 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.loginForm);
-
     this.userService.getUserByEmail(this.email.value)
       .subscribe((user: User) => {
         if (user) {
-          console.log(user);
           if (user.password === this.password.value) {
             this.resetMessageText();
             LoginComponent.setUserToLocalStorage(user);
@@ -51,10 +54,10 @@ export class LoginComponent implements OnInit {
             this.authService.login();
             // this.router.navigate('');
           } else {
-            this.getMessage('Wrong password');
+            this.getMessage('Wrong password', 'danger');
           }
         } else {
-          this.getMessage('There is no user with that email');
+          this.getMessage('There is no user with that email', 'danger');
         }
       });
   }

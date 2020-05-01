@@ -17,10 +17,11 @@ export class UserService {
     return this.http.get<User>(`http://localhost:3000/users?email=${email}`)
       .pipe(
         map((user: User) => user[0] ? user[0] : null),
-        catchError((error: HttpErrorResponse) => {
-          console.log(error);
-          return throwError(error);
-        })
+        catchError((error: HttpErrorResponse) => throwError(error))
       )
+  }
+
+  createUser(user: User): Observable<User> {
+    return this.http.post<User>('http://localhost:3000/users', user);
   }
 }
