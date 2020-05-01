@@ -1,8 +1,15 @@
 <p class="text-xs-center">Войдите для работы</p>
+
+<div *ngIf="message && message.text"
+     class="alert alert-{{message.type}}"
+>
+  {{message.text}}
+</div>
+
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div
     class="form-group"
-    [ngClass]="{'has-error': loginForm.get('email').invalid && loginForm.get('email').touched}"
+    [ngClass]="{'has-error': email.invalid && email.touched}"
   >
     <label for="email">Email</label>
     <input
@@ -14,15 +21,15 @@
     >
     <span
       class="form-help-text"
-      *ngIf="loginForm.get('email').invalid && loginForm.get('email').touched"
+      *ngIf="email.invalid && email.touched"
     >
-      <span *ngIf="loginForm.get('email').errors.required">Email can not be empty</span>
-      <span *ngIf="loginForm.get('email').errors.email">Enter correct email</span>
+      <span *ngIf="email.errors.required">Email can not be empty</span>
+      <span *ngIf="email.errors.email">Enter correct email</span>
     </span>
   </div>
   <div
     class="form-group"
-    [ngClass]="{'has-error': loginForm.get('password').invalid && loginForm.get('password').touched}"
+    [ngClass]="{'has-error': password.invalid && password.touched}"
   >
     <label for="password">Пароль</label>
     <input
@@ -34,15 +41,15 @@
     >
     <span
       class="form-help-text"
-      *ngIf="loginForm.get('password').invalid && loginForm.get('password').touched"
+      *ngIf="password.invalid && password.touched"
     >
-      <span *ngIf="loginForm.get('password').errors.required">Password can not be empty</span>
-      <span *ngIf="loginForm.get('password').errors.minlength">
+      <span *ngIf="password.errors.required">Password can not be empty</span>
+      <span *ngIf="password.errors.minlength">
         Password should be at least
-        {{loginForm.get('password').errors.minlength.requiredLength}}
+        {{password.errors.minlength.requiredLength}}
         symbols.
         You entered only
-        {{loginForm.get('password').errors.minlength.actualLength}}
+        {{password.errors.minlength.actualLength}}
       </span>
     </span>
   </div>
@@ -56,7 +63,7 @@
   </div>
   <div class="form-group">
     <p class="text-muted text-xs-center">
-      Нет аккаунта? <a href="#">Зарегистрироваться!</a>
+      Нет аккаунта? <a [routerLink]="'/registration'">Зарегистрироваться!</a>
     </p>
   </div>
 </form>
