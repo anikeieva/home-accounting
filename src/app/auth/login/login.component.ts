@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
             LoginComponent.setUserToLocalStorage(user);
 
             this.authService.login();
-            // this.router.navigate('');
+            this.router.navigate(['/system', 'bill']).then(() => {});
           } else {
             this.getMessage('Wrong password', 'danger');
           }
@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
   }
 
   private resetMessageText() {
-    if (this.message.text) {
+    if (this.message && this.message.text) {
       this.message.text = '';
     }
   }
