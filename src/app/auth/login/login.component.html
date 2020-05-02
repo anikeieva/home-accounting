@@ -1,4 +1,4 @@
-<p class="text-xs-center">Войдите для работы</p>
+<p class="text-xs-center">Login for work</p>
 
 <div *ngIf="message && message.text"
      class="alert alert-{{message.type}}"
@@ -16,7 +16,7 @@
       type="text"
       class="form-control underlined"
       id="email"
-      placeholder="Введите ваш email"
+      placeholder="Enter your email"
       formControlName="email"
     >
     <span
@@ -31,12 +31,12 @@
     class="form-group"
     [ngClass]="{'has-error': password.invalid && password.touched}"
   >
-    <label for="password">Пароль</label>
+    <label for="password">Password</label>
     <input
       type="password"
       class="form-control underlined"
       id="password"
-      placeholder="Пароль"
+      placeholder="Password"
       formControlName="password"
     >
     <span
@@ -58,12 +58,12 @@
             class="btn btn-block btn-primary"
             [disabled]="loginForm.invalid"
     >
-      Войти
+      Login
     </button>
   </div>
   <div class="form-group">
     <p class="text-muted text-xs-center">
-      Нет аккаунта? <a [routerLink]="'/registration'">Зарегистрироваться!</a>
+      Do not have any account? <a [routerLink]="'/registration'">Sign in!</a>
     </p>
   </div>
 </form>

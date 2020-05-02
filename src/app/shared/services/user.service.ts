@@ -1,27 +1,28 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable, throwError} from "rxjs";
-import { catchError, map } from "rxjs/operators";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { User } from "../models/user.model";
+import { User } from '../models/user.model';
+import {BaseApiService} from '../core/base-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class UserService extends BaseApiService {
 
-  constructor(private http: HttpClient) { }
+  constructor(public http: HttpClient) {
+    super(http);
+  }
 
-  // TODO: add catchError handeling
   getUserByEmail(email: string): Observable<User> {
-    return this.http.get<User>(`http://localhost:3000/users?email=${email}`)
+    return this.get(`users?email=${email}`)
       .pipe(
-        map((user: User) => user[0] ? user[0] : null),
-        catchError((error: HttpErrorResponse) => throwError(error))
-      )
+        map((user: User) => user[0] ? user[0] : null)
+      );
   }
 
   createUser(user: User): Observable<User> {
-    return this.http.post<User>('http://localhost:3000/users', user);
+    return this.post('users', user);
   }
 }

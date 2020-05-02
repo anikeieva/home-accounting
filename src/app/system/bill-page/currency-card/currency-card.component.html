@@ -1,0 +1,32 @@
+<div class="col col-xs-12 col-sm-12 col-md-6 col-xl-7 history-col">
+  <div class="card">
+    <div class="card-block">
+      <div class="title-block">
+        <h4 class="title">Exchange Rates</h4>
+      </div>
+      <div class="row row-sm stats-container">
+        <table class="table table-hover">
+          <thead>
+          <tr>
+            <th>Currency</th>
+            <th>Rate</th>
+            <th>Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td>UAH</td>
+            <td>1</td>
+            <td>{{ this.currencies?.USD?.date | date: 'dd.MM.yyyy' }}</td>
+          </tr>
+          <tr *ngFor="let currencyName of currenciesNames">
+            <td>{{ currencyName }}</td>
+            <td>{{ this.currencies[currencyName]?.rate }}</td>
+            <td>{{ this.currencies[currencyName]?.date | date: 'dd.MM.yyyy' }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

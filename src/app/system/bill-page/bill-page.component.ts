@@ -1,15 +1,87 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { BillService } from '../../shared/services/bill.service';
+import { CurrencyInfoMonobank } from '../../shared/models/currencyInfoMonobank';
+import { combineLatest, Subscription } from 'rxjs';
+import { Bill } from '../../shared/models/bill.model';
+import { Currency } from '../../shared/models/currency.model';
 
 @Component({
   selector: 'acc-bill-page',
   templateUrl: './bill-page.component.html',
   styleUrls: ['./bill-page.component.scss']
 })
-export class BillPageComponent implements OnInit {
+export class BillPageComponent implements OnInit, OnDestroy {
+  subscription: Subscription;
+  bill: Bill;
+  isLoaded = false;
+  currencyCodesAByName = {
+    UAH: 980,
+    USD: 840,
+    EUR: 978
+  };
 
-  constructor() { }
+  currencyCodesA = {
+    980: 'UAH',
+    840: 'USD',
+    978: 'EUR'
+  };
+
+  currencies: {
+    [key: string]: Currency
+  };
+
+  constructor(
+    private  billService: BillService
+  ) { }
 
   ngOnInit(): void {
+    this.subscription = combineLatest([
+      this.billService.getBill(),
+      this.billService.getCurrency()
+    ]).subscribe((data: [Bill, CurrencyInfoMonobank[]]) => {
+      if (data) {
+        this.bill = data[0];
+        const currenciesMonobank: CurrencyInfoMonobank[] = data[1];
+
+        this.getCurrencies(currenciesMonobank);
+        this.isLoaded = true;
+      }
+    });
   }
 
+  private getCurrencies(currenciesMonobank: CurrencyInfoMonobank[]) {
+    this.currencies = {};
+
+    if (currenciesMonobank) {
+      currenciesMonobank.forEach((currency: CurrencyInfoMonobank) => {
+        if (currency && currency.currencyCodeB === this.currencyCodesAByName.UAH &&
+          (currency.currencyCodeA === this.currencyCodesAByName.USD ||
+            currency.currencyCodeA === this.currencyCodesAByName.EUR)) {
+          const currencyName: string = this.currencyCodesA[currency.currencyCodeA];
+          const rate: number = currency.rateCross || (currency.rateBuy + currency.rateSell) / 2;
+          const date: Date = (currency.date && new Date(currency.date * 1000)) || new Date();
+
+          this.currencies[currencyName] = new Currency(currencyName, currency.currencyCodeA, rate, date);
+        }
+      });
+    }
+  }
+
+  onRefresh() {
+    this.isLoaded = false;
+    this.billService.getCurrency()
+      .subscribe((currenciesMonobank: CurrencyInfoMonobank[]) => {
+        if (currenciesMonobank) {
+          this.getCurrencies(currenciesMonobank);
+        }
+
+        this.isLoaded = true;
+      }, () => {
+        this.isLoaded = true;
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 }
