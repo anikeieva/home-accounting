@@ -1,9 +1,9 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import { BillService } from '../../shared/services/bill.service';
-import { CurrencyInfoMonobank } from '../../shared/models/currencyInfoMonobank';
-import { combineLatest, Subscription } from 'rxjs';
-import { Bill } from '../../shared/models/bill.model';
-import { Currency } from '../../shared/models/currency.model';
+import {BillService} from '../../shared/services/bill.service';
+import {CurrencyInfoMonobank} from '../../shared/models/currencyInfoMonobank';
+import {combineLatest, Subscription} from 'rxjs';
+import {Bill} from '../../shared/models/bill.model';
+import {Currency} from '../../shared/models/currency.model';
 
 @Component({
   selector: 'acc-bill-page',
@@ -11,9 +11,11 @@ import { Currency } from '../../shared/models/currency.model';
   styleUrls: ['./bill-page.component.scss']
 })
 export class BillPageComponent implements OnInit, OnDestroy {
-  subscription: Subscription;
+  subscription: Subscription[] = [];
   bill: Bill;
   isLoaded = false;
+  loadingText = 'Loading...';
+
   currencyCodesAByName = {
     UAH: 980,
     USD: 840,
@@ -35,18 +37,21 @@ export class BillPageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.subscription = combineLatest([
-      this.billService.getBill(),
-      this.billService.getCurrency()
-    ]).subscribe((data: [Bill, CurrencyInfoMonobank[]]) => {
-      if (data) {
-        this.bill = data[0];
-        const currenciesMonobank: CurrencyInfoMonobank[] = data[1];
+    this.subscription.push(
+      combineLatest([
+        this.billService.getBill(),
+        this.billService.getCurrency()
+      ]).subscribe((data: [Bill, CurrencyInfoMonobank[]]) => {
+        if (data) {
+          console.log(data);
+          this.bill = data[0];
+          const currenciesMonobank: CurrencyInfoMonobank[] = data[1];
 
-        this.getCurrencies(currenciesMonobank);
-        this.isLoaded = true;
-      }
-    });
+          this.getCurrencies(currenciesMonobank);
+          this.isLoaded = true;
+        }
+      }, this.ifCurrenciesRejected.bind(this))
+    );
   }
 
   private getCurrencies(currenciesMonobank: CurrencyInfoMonobank[]) {
@@ -69,19 +74,27 @@ export class BillPageComponent implements OnInit, OnDestroy {
 
   onRefresh() {
     this.isLoaded = false;
-    this.billService.getCurrency()
-      .subscribe((currenciesMonobank: CurrencyInfoMonobank[]) => {
-        if (currenciesMonobank) {
-          this.getCurrencies(currenciesMonobank);
-        }
 
-        this.isLoaded = true;
-      }, () => {
-        this.isLoaded = true;
-      });
+    this.subscription.push(
+      this.billService.getCurrency()
+        .subscribe((currenciesMonobank: CurrencyInfoMonobank[]) => {
+          if (currenciesMonobank) {
+            this.getCurrencies(currenciesMonobank);
+          }
+
+          this.isLoaded = true;
+        }, this.ifCurrenciesRejected.bind(this))
+    );
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.subscription.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  private ifCurrenciesRejected(errorMessage: string) {
+    this.isLoaded = false;
+    this.loadingText = errorMessage ? errorMessage + '. Try again in a minute' : 'Try again in a minute';
   }
 }

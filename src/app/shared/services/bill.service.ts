@@ -9,7 +9,7 @@ import {BaseApiService} from '../core/base-api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class BillService extends BaseApiService{
+export class BillService extends BaseApiService {
   constructor(
     public http: HttpClient
   ) {

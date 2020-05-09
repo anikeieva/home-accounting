@@ -10,7 +10,7 @@
 </div>
 <section class="section">
   <div class="row" *ngIf="!isLoaded">
-    Loading...
+    {{loadingText}}
   </div>
   <div class="row" *ngIf="isLoaded">
     <acc-bill-card [bill]="bill" [currencies]="currencies"></acc-bill-card>
