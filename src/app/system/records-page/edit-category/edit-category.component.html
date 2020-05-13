@@ -1,22 +1,84 @@
 <div class="card">
   <div class="card-header bordered">
     <div class="header-block">
-      <h3 class="title">Добавить категорию</h3>
+      <h3 class="title">Edit category</h3>
     </div>
   </div>
   <div class="card-block">
-    <form>
-      <div class="form-group has-error">
-        <label class="control-label" for="category-name">Введите название</label>
-        <input type="text" id="category-name" class="form-control">
-        <span class="form-help-text">Валидация ошибка</span>
+    <div *ngIf="message && message.text"
+         class="alert alert-{{message.type}}">
+        {{message.text}}
+    </div>
+
+    <form #form="ngForm" (ngSubmit)="onSubmit(form)">
+      <div class="form-group">
+        <label
+          class="control-label"
+          for="select-category-edit">
+          Enter name
+        </label>
+        <select class="form-control"
+                id="select-category-edit"
+                [(ngModel)]="currentCategoryId"
+                [ngModelOptions]="{standalone: true}"
+                (change)="onCategoryChange()">
+          <option *ngFor="let category of categories"
+                  [value]="category.id">
+            {{category.name}}
+          </option>
+        </select>
       </div>
-      <div class="form-group has-success">
-        <label class="control-label" for="category-value">Введите лимит</label>
-        <input type="number" value="0" id="category-value" class="form-control">
-        <span class="form-help-text">Валидация нет ошибки</span>
+      <div
+        class="form-group"
+        [ngClass]="{'has-error': name.invalid && name.touched}"
+      >
+        <label
+          class="control-label"
+          for="category-name-edit">
+          Enter name
+        </label>
+        <input type="text"
+               id="category-name-edit"
+               class="form-control"
+               required
+               [(ngModel)]="currentCategory.name"
+               name="name"
+               #name="ngModel"
+        >
+        <span
+          *ngIf="name.invalid && name.touched"
+          class="form-help-text"
+        >
+          Category name can not be empty
+        </span>
       </div>
-      <button type="submit" class="btn btn-primary">Добавить</button>
+      <div
+        class="form-group"
+        [ngClass]="{'has-error': limit.invalid && limit.touched}"
+      >
+        <label
+          class="control-label"
+          for="category-value-edit">
+          Enter limit
+        </label>
+        <input
+          type="number"
+          id="category-value-edit"
+          class="form-control"
+          required
+          min="1"
+          [(ngModel)]="currentCategory.limit"
+          name="limit"
+          #limit="ngModel"
+          (input)="onChangeLimit(limit)"
+        >
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid">
+        Edit
+      </button>
     </form>
   </div>
 </div>

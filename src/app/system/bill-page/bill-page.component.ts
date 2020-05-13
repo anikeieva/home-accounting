@@ -43,7 +43,6 @@ export class BillPageComponent implements OnInit, OnDestroy {
         this.billService.getCurrency()
       ]).subscribe((data: [Bill, CurrencyInfoMonobank[]]) => {
         if (data) {
-          console.log(data);
           this.bill = data[0];
           const currenciesMonobank: CurrencyInfoMonobank[] = data[1];
 

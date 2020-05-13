@@ -4,7 +4,7 @@
   </h3>
 </div>
 
-<section class="section">
+<section class="section" *ngIf="isLoaded">
   <div class="row">
     <div class="col-md-6">
       <acc-add-event></acc-add-event>
@@ -15,7 +15,12 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <acc-edit-category></acc-edit-category>
+      <acc-edit-category [categories]="categories"
+                         (editNewCategory)="editNewCategory($event)"></acc-edit-category>
     </div>
   </div>
+</section>
+
+<section class="section text-center" *ngIf="!isLoaded">
+  Loading...
 </section>

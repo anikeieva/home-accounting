@@ -21,7 +21,7 @@
   "categories": [
     {
       "name": "Home",
-      "limit": 15000,
+      "limit": 18011,
       "id": 1
     },
     {
@@ -38,6 +38,11 @@
       "name": "new",
       "limit": 1345678,
       "id": 4
+    },
+    {
+      "name": "new-category",
+      "limit": 2,
+      "id": 5
     }
   ],
   "events": [
