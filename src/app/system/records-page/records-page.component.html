@@ -7,16 +7,19 @@
 <section class="section" *ngIf="isLoaded">
   <div class="row">
     <div class="col-md-6">
-      <acc-add-event></acc-add-event>
+      <acc-add-event [categories]="categories">
+      </acc-add-event>
     </div>
     <div class="col-md-6">
-      <acc-add-category (addNewCategory)="onAddCategory($event)"></acc-add-category>
+      <acc-add-category (addNewCategory)="onAddCategory($event)">
+      </acc-add-category>
     </div>
   </div>
   <div class="row">
     <div class="col-md-6">
       <acc-edit-category [categories]="categories"
-                         (editNewCategory)="editNewCategory($event)"></acc-edit-category>
+                         (editNewCategory)="editNewCategory($event)">
+      </acc-edit-category>
     </div>
   </div>
 </section>

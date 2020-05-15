@@ -1,18 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import {FormControl, FormGroup, ValidationErrors, Validators} from "@angular/forms";
-import { Router } from "@angular/router";
-import {Observable, throwError} from "rxjs";
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import {Observable, Subscription, throwError} from 'rxjs';
 
-import { UserService } from "../../shared/services/user.service";
-import { User } from "../../shared/models/user.model";
-import {catchError, map} from "rxjs/operators";
+import { UserService } from '../../shared/services/user.service';
+import { User } from '../../shared/models/user.model';
+import { catchError, map } from 'rxjs/operators';
 
 @Component({
   selector: 'acc-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit, OnDestroy {
+  subscriptions: Subscription[] = [];
   registrationForm: FormGroup;
 
   get email() {
@@ -49,16 +50,18 @@ export class RegistrationComponent implements OnInit {
     const { email, password, name } = this.registrationForm.value;
     const user: User = new User(email, password, name);
 
-    this.userService.createUser(user)
-      .subscribe((user: User) => {
-        if (user) {
-          this.router.navigate(['/login'], {
-            queryParams: {
-              canLoginNow: true
-            }
-          }).then(() => {});
-        }
-      });
+    this.subscriptions.push(
+      this.userService.createUser(user)
+        .subscribe((responsesUser: User) => {
+          if (responsesUser) {
+            this.router.navigate(['/login'], {
+              queryParams: {
+                canLoginNow: true
+              }
+            }).then(() => {});
+          }
+        })
+    );
   }
 
   forbiddenEmail(control: FormControl): Observable<ValidationErrors | null> {
@@ -66,7 +69,13 @@ export class RegistrationComponent implements OnInit {
       .pipe(
         map((user: User) => user ? { forbiddenEmail: true } : null),
         catchError((error: Error) => throwError(error))
-      )
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription: Subscription) => {
+      subscription.unsubscribe();
+    });
   }
 
 }
