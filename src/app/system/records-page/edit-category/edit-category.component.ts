@@ -46,9 +46,10 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   }
 
   onCategoryChange() {
-    this.currentCategory = this.categories.find((category: Category) => {
+    const currentCategory = this.categories.find((category: Category) => {
       return category.id === +this.currentCategoryId;
     });
+    this.currentCategory = new Category(currentCategory.name, currentCategory.limit);
   }
 
   ngOnDestroy() {
