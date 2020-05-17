@@ -26,7 +26,6 @@ export class BillService extends BaseApiService {
         catchError((error: HttpErrorResponse) => {
           const errorMessage: string = (error && error.error && error.error.errorDescription) ||
           'Error with monobank API';
-          console.log(errorMessage);
 
           return throwError(errorMessage);
         })

@@ -19,7 +19,7 @@
                 name="category"
                 [ngModel]="1">
           <option *ngFor="let category of categories"
-                  [value]="category.id">
+                  [ngValue]="category.id">
             {{category.name}}
           </option>
         </select>

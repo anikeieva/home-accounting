@@ -29,9 +29,7 @@ export class AddEventComponent implements OnInit, OnDestroy {
   constructor(private eventsService: EventsService,
               private billService: BillService) { }
 
-  ngOnInit(): void {
-    console.log(this.categories);
-  }
+  ngOnInit(): void {}
 
   onSubmit(form: NgForm) {
     if (form) {

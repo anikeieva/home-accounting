@@ -14,7 +14,7 @@
     }
   ],
   "bill": {
-    "value": 80500,
+    "value": 78101,
     "currency": "UAH"
   },
   "categories": [
@@ -35,23 +35,8 @@
     },
     {
       "name": "new-new",
-      "limit": 1345678,
+      "limit": 200,
       "id": 4
-    },
-    {
-      "name": "new-category",
-      "limit": 2,
-      "id": 5
-    },
-    {
-      "name": "new4",
-      "limit": 1,
-      "id": 6
-    },
-    {
-      "name": "test5",
-      "limit": 1,
-      "id": 7
     }
   ],
   "events": [
@@ -96,20 +81,28 @@
       "description": "Refueling + maintenance passage"
     },
     {
-      "type": "income",
-      "amount": 500,
-      "category": "4",
-      "date": "15.05.2020 23.04.52",
-      "description": "test",
-      "id": 6
+      "type": "outcome",
+      "amount": 150,
+      "category": 4,
+      "date": "17.05.2020 13.45.25",
+      "description": " 150",
+      "id": 15
     },
     {
       "type": "outcome",
-      "amount": 20000,
-      "category": 1,
-      "date": "15.05.2020 23.19.48",
+      "amount": 1500,
+      "category": 3,
+      "date": "17.05.2020 13.48.07",
       "description": "test",
-      "id": 7
+      "id": 16
+    },
+    {
+      "type": "outcome",
+      "amount": 51,
+      "category": 4,
+      "date": "17.05.2020 13.48.24",
+      "description": "test",
+      "id": 17
     }
   ]
 }
