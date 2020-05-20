@@ -9,12 +9,18 @@ import { AccEvent } from '../../../shared/models/event.model';
   styleUrls: ['./history-events.component.scss']
 })
 export class HistoryEventsComponent implements OnInit {
+  searchValue = '';
+  searchPlaceholder = '';
+  searchField = '';
+
   @Input() categories: Category[] = [];
   @Input() events: AccEvent[] = [];
 
   constructor() { }
 
   ngOnInit(): void {
+    this.getSearchValue('amount');
+
     this.events.forEach(((event: AccEvent) => {
       const categoryFromEvent: Category = this.categories.find((category) => {
         return category.id === event.category;
@@ -30,6 +36,18 @@ export class HistoryEventsComponent implements OnInit {
       'label-danger': event.type === 'outcome',
       'label-success': event.type === 'income'
     };
+  }
+
+  getSearchValue(value: string) {
+    const searchValuesMap = {
+      amount: 'Amount',
+      categoryName: 'Category',
+      date: 'Date',
+      type: 'Type'
+    };
+
+    this.searchPlaceholder = searchValuesMap[value];
+    this.searchField = value;
   }
 
 }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import {BaseApiService} from '../core/base-api.service';
-import {HttpClient} from '@angular/common/http';
-import {Category} from '../models/category';
-import {Observable} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+import { BaseApiService } from '../core/base-api.service';
+import { Category } from '../models/category';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,9 @@ export class CategoriesService extends BaseApiService {
 
   updateCategory(category: Category): Observable<Category> {
     return this.put(`categories/${category.id}`, category);
+  }
+
+  getCategoryById(id: number): Observable<Category> {
+    return this.get(`categories/${id}`);
   }
 }
