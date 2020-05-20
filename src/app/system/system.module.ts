@@ -16,6 +16,11 @@ import { CurrencyCardComponent } from './bill-page/currency-card/currency-card.c
 import { AddEventComponent } from './records-page/add-event/add-event.component';
 import { AddCategoryComponent } from './records-page/add-category/add-category.component';
 import { EditCategoryComponent } from './records-page/edit-category/edit-category.component';
+import { HistoryChartComponent } from './history-page/history-chart/history-chart.component';
+import { HistoryEventsComponent } from './history-page/history-events/history-events.component';
+import { HistoryDetailsComponent } from './history-page/history-details/history-details.component';
+import { HistoryFilterComponent } from './history-page/history-filter/history-filter.component';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [
@@ -31,12 +36,17 @@ import { EditCategoryComponent } from './records-page/edit-category/edit-categor
     CurrencyCardComponent,
     AddEventComponent,
     AddCategoryComponent,
-    EditCategoryComponent
+    EditCategoryComponent,
+    HistoryChartComponent,
+    HistoryEventsComponent,
+    HistoryDetailsComponent,
+    HistoryFilterComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
-    SystemRoutingModule
+    SystemRoutingModule,
+    NgxChartsModule
   ]
 })
 export class SystemModule { }

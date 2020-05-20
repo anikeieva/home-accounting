@@ -5,6 +5,7 @@ export class AccEvent {
     public category: number,
     public date: string,
     public description: string,
+    public categoryName?: string,
     public id?: string,
   ) {
   }
