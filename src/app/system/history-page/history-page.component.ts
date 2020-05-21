@@ -1,10 +1,13 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, Subscription} from 'rxjs';
-import {Category} from '../../shared/models/category';
-import {AccEvent} from '../../shared/models/event.model';
-import {CategoriesService} from '../../shared/services/categories.service';
-import {EventsService} from '../../shared/services/events.service';
-import {ChartData} from '../../shared/models/chartData';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { combineLatest, Subscription } from 'rxjs';
+
+import { Category } from '../../shared/models/category';
+import { AccEvent } from '../../shared/models/event.model';
+import { CategoriesService } from '../../shared/services/categories.service';
+import { EventsService } from '../../shared/services/events.service';
+import { ChartData } from '../../shared/models/chartData';
+import { HistoryFilterComponent } from './history-filter/history-filter.component';
 
 @Component({
   selector: 'acc-history-page',
@@ -21,7 +24,8 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
 
   constructor(
     private categoriesService: CategoriesService,
-    private eventsService: EventsService
+    private eventsService: EventsService,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -37,6 +41,18 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
         this.isLoaded = true;
       }
     });
+  }
+
+  openHistoryFilter() {
+    this.subscriptions.push(
+      this.dialog.open(HistoryFilterComponent, {
+        data: {
+          categories: this.categories
+        }
+      }).afterClosed().subscribe((result) => {
+        console.log(result);
+      })
+    );
   }
 
   ngOnDestroy(): void {

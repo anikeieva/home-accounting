@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { SystemRoutingModule } from './system-routing.module';
-import { SharedModule } from "../shared/shared.module";
+import { SharedModule } from '../shared/shared.module';
 import { SystemComponent } from './system.component';
 import { BillPageComponent } from './bill-page/bill-page.component';
 import { HistoryPageComponent } from './history-page/history-page.component';
@@ -20,7 +20,7 @@ import { HistoryChartComponent } from './history-page/history-chart/history-char
 import { HistoryEventsComponent } from './history-page/history-events/history-events.component';
 import { HistoryDetailsComponent } from './history-page/history-details/history-details.component';
 import { HistoryFilterComponent } from './history-page/history-filter/history-filter.component';
-import {NgxChartsModule} from '@swimlane/ngx-charts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @NgModule({
   declarations: [

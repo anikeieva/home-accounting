@@ -1,46 +1,64 @@
-<div class="modal fade">
+<div class="modal fade in">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close">
+        <button type="button"
+                class="close"
+                (click)="closeModal()">
           <span>×</span>
         </button>
-        <h4 class="modal-title">Фильтр</h4>
+        <h4 class="modal-title">Filter</h4>
       </div>
       <div class="modal-body">
         <div class="form-group">
-          <label class="control-label" for="period">Выберите период</label>
-          <select class="form-control" id="period">
-            <option>тип</option>
+          <label class="control-label" for="period">Choose a period</label>
+          <select class="form-control"
+                  id="period"
+                  [(ngModel)]="selectedPeriod">
+            <option *ngFor="let period of periodsList"
+                    [value]="period.type">
+              {{period.label}}
+            </option>
           </select>
         </div>
         <div class="form-group">
-          <label class="control-label">Выберите тип события</label>
+          <label class="control-label">Choose the event type</label>
           <div>
-            <label>
+            <label *ngFor="let eventType of eventTypes">
               <input
                 class="checkbox"
                 type="checkbox"
-              >
-              <span>еуче</span>
+                [value]="eventType.type"
+                (change)="selectEventType($event.target)">
+              <span>
+                {{eventType.label}}
+              </span>
             </label>
           </div>
         </div>
         <div class="form-group">
-          <label class="control-label">Выберите категории</label>
+          <label class="control-label">Choose a category</label>
           <div>
-            <label>
+            <label *ngFor="let category of data.categories">
               <input
                 class="checkbox"
                 type="checkbox"
-              >
-              <span>еуче</span>
+                [value]="category.id"
+                (change)="selectCategory($event.target)">
+              <span>{{category.name}}</span>
             </label>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary">Отмена</button>
-          <button type="button" class="btn btn-primary">Применить</button>
+          <button type="button"
+                  class="btn btn-secondary"
+                  (click)="closeModal()">
+            Cancel
+          </button>
+          <button type="button"
+                  class="btn btn-primary">
+            Apply
+          </button>
         </div>
       </div>
     </div>

@@ -1,15 +1,16 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {NgForm, NgModel} from '@angular/forms';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
+import { mergeMap } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
-import {Category} from '../../../shared/models/category';
-import {AccEvent} from '../../../shared/models/event.model';
+import { Category } from '../../../shared/models/category';
+import { AccEvent } from '../../../shared/models/event.model';
 import * as moment from 'moment';
-import {EventsService} from '../../../shared/services/events.service';
-import {BillService} from '../../../shared/services/bill.service';
-import {Bill} from '../../../shared/models/bill.model';
-import {mergeMap} from 'rxjs/operators';
-import {Message} from '../../../shared/models/message.model';
-import {Subscription} from 'rxjs';
+import { EventsService } from '../../../shared/services/events.service';
+import { BillService } from '../../../shared/services/bill.service';
+import { Bill } from '../../../shared/models/bill.model';
+import { Message } from '../../../shared/models/message.model';
+import { FormField } from '../../../shared/models/formField.model';
 
 @Component({
   selector: 'acc-add-event',
@@ -19,7 +20,7 @@ import {Subscription} from 'rxjs';
 export class AddEventComponent implements OnInit, OnDestroy {
   @Input() categories: Category[] = [];
 
-  types = [
+  types: FormField[] = [
     {type: 'income', label: 'Income'},
     {type: 'outcome', label: 'Outcome'}
   ];
