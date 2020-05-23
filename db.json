@@ -14,7 +14,7 @@
     }
   ],
   "bill": {
-    "value": 78101,
+    "value": 74101,
     "currency": "UAH"
   },
   "categories": [
@@ -103,6 +103,14 @@
       "date": "17.05.2020 13.48.24",
       "description": "test",
       "id": 17
+    },
+    {
+      "type": "outcome",
+      "amount": 4000,
+      "category": 3,
+      "date": "23.05.2020 12.41.20",
+      "description": "test",
+      "id": 18
     }
   ]
 }

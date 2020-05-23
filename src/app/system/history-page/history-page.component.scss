@@ -1,0 +1,26 @@
+.history-page {
+  &__filter-block {
+    display: flex;
+    .btn {
+      margin: 0;
+    }
+  }
+}
+
+.history-filter-searches {
+  display: flex;
+  margin-right: 10px;
+  &__block {
+    display: flex;
+    margin: 0;
+    padding: 0;
+  }
+  &__field {
+    list-style-type: none;
+    margin-right: 5px;
+    padding: 7px;
+    color: white;
+    background-color: cadetblue;
+    border-radius: 5px;
+  }
+}

@@ -1,8 +1,9 @@
 export class Category {
   constructor(
     public name: string,
-    public limit: number,
-    public id?: number
+    public limit?: number,
+    public id?: number,
+    public checked?: boolean
   ) {
   }
 }

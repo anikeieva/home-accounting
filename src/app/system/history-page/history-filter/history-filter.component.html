@@ -15,8 +15,9 @@
           <select class="form-control"
                   id="period"
                   [(ngModel)]="selectedPeriod">
-            <option *ngFor="let period of periodsList"
-                    [value]="period.type">
+            <option disabled hidden [ngValue]="''">Choose a period</option>
+            <option *ngFor="let period of data.historyFilterData.period"
+                    [ngValue]="period.type">
               {{period.label}}
             </option>
           </select>
@@ -24,12 +25,13 @@
         <div class="form-group">
           <label class="control-label">Choose the event type</label>
           <div>
-            <label *ngFor="let eventType of eventTypes">
+            <label *ngFor="let eventType of data.historyFilterData.eventTypes">
               <input
                 class="checkbox"
                 type="checkbox"
+                [checked]="eventType.checked"
                 [value]="eventType.type"
-                (change)="selectEventType($event.target)">
+                (change)="selectEventType($event.target, eventType)">
               <span>
                 {{eventType.label}}
               </span>
@@ -39,12 +41,13 @@
         <div class="form-group">
           <label class="control-label">Choose a category</label>
           <div>
-            <label *ngFor="let category of data.categories">
+            <label *ngFor="let category of data.historyFilterData.categories">
               <input
                 class="checkbox"
                 type="checkbox"
+                [checked]="category.checked"
                 [value]="category.id"
-                (change)="selectCategory($event.target)">
+                (change)="selectCategory($event.target, category)">
               <span>{{category.name}}</span>
             </label>
           </div>
@@ -56,7 +59,8 @@
             Cancel
           </button>
           <button type="button"
-                  class="btn btn-primary">
+                  class="btn btn-primary"
+                  (click)="applyFilter()">
             Apply
           </button>
         </div>

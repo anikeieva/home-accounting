@@ -1,21 +1,58 @@
-<div class="title-block">
-  <h3 class="title pull-left">
-    History page
-    <span class="sparkline bar"></span>
-  </h3>
-  <div class="pull-right">
-    <button class="btn-sm btn btn-primary-outline" (click)="openHistoryFilter()">
-      <i class="fa fa-filter"></i>
-    </button>
+<div class="history-page">
+  <div class="title-block">
+    <h3 class="title pull-left">
+      History page
+      <span class="sparkline bar"></span>
+    </h3>
+    <div class="pull-right history-page__filter-block">
+      <div *ngIf="historyFilterData && historyFilterData.isEnableFilter"
+           class="history-filter-searches">
+        <ul *ngIf="historyFilterData.eventTypes.length"
+            class="history-filter-searches__block">
+          <li *ngFor="let eventTypeField of historyFilterData.eventTypes"
+              [hidden]="!eventTypeField.checked"
+              class="history-filter-searches__field">
+            {{eventTypeField.label}}
+          </li>
+        </ul>
+
+        <ul *ngIf="historyFilterData.categories.length"
+            class="history-filter-searches__block">
+          <li *ngFor="let categoryField of historyFilterData.categories"
+              [hidden]="!categoryField.checked"
+              class="history-filter-searches__field">
+            {{categoryField.name}}
+          </li>
+        </ul>
+
+        <ul *ngIf="historyFilterData.period.length"
+            class="history-filter-searches__block">
+          <li *ngFor="let period of historyFilterData.period"
+              [hidden]="!period.checked"
+              class="history-filter-searches__field">
+            {{period.label}}
+          </li>
+        </ul>
+
+        <button class="btn-sm btn btn-primary-outline" (click)="disableFilter()">
+          Remove filter
+        </button>
+      </div>
+
+      <button class="btn-sm btn btn-primary-outline" (click)="openHistoryFilter()">
+        <i class="fa fa-filter"></i>
+      </button>
+    </div>
   </div>
+
+  <section *ngIf="!isLoaded"></section>
+
+  <section *ngIf="isLoaded">
+    <acc-history-chart [data]="chartData"></acc-history-chart>
+
+    <acc-history-events [categories]="categories"
+                        [events]="filteredEvents">
+    </acc-history-events>
+  </section>
+
 </div>
-
-<section *ngIf="!isLoaded"></section>
-
-<section *ngIf="isLoaded">
-  <acc-history-chart [data]="chartData"></acc-history-chart>
-
-  <acc-history-events [categories]="categories"
-                      [events]="events">
-  </acc-history-events>
-</section>
