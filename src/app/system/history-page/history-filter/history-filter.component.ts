@@ -4,8 +4,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormField } from '../../../shared/models/formField.model';
 import { Category } from '../../../shared/models/category';
 import { HistoryFilterData } from '../../../shared/models/historyFilterData.model';
-import * as moment from 'moment';
-import StartOf = moment.unitOfTime.StartOf;
 
 @Component({
   selector: 'acc-history-filter',
@@ -13,7 +11,7 @@ import StartOf = moment.unitOfTime.StartOf;
   styleUrls: ['./history-filter.component.scss']
 })
 export class HistoryFilterComponent implements OnInit {
-  selectedPeriod: StartOf | string = '';
+  historyFilterData: HistoryFilterData;
 
   constructor(
     public dialogRef: MatDialogRef<HistoryFilterComponent>,
@@ -21,7 +19,20 @@ export class HistoryFilterComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.data.historyFilterData);
+    this.historyFilterData = new HistoryFilterData();
+
+    if (this.data && this.data.historyFilterData) {
+      Object.keys(this.data.historyFilterData).forEach((key: string) => {
+        if (Array.isArray(this.data.historyFilterData[key])) {
+          this.data.historyFilterData[key].forEach((item) => {
+            const newItem = Object.assign({}, item);
+            this.historyFilterData[key].push(newItem);
+          });
+        }
+      });
+
+      // this.initsSelectedPeriod();
+    }
   }
 
   closeModal(historyFilterData: HistoryFilterData = null) {
@@ -33,12 +44,12 @@ export class HistoryFilterComponent implements OnInit {
     eventType.checked = checked;
 
     if (eventType) {
-      const currentItem: FormField = this.data.historyFilterData.eventTypes.find((field: FormField) => {
+      const currentItem: FormField = this.historyFilterData.eventTypes.find((field: FormField) => {
         return field.type === value;
       });
 
       if (!currentItem) {
-        this.data.historyFilterData.eventTypes.push(eventType);
+        this.historyFilterData.eventTypes.push(eventType);
       }
     }
   }
@@ -49,22 +60,27 @@ export class HistoryFilterComponent implements OnInit {
   }
 
   applyFilter() {
-    this.selectPeriod();
+    // this.selectPeriod();
 
-    if (!this.data.historyFilterData.eventTypes.length || !this.data.historyFilterData.categories.length) {
+    if (!this.historyFilterData.eventTypes.length || !this.historyFilterData.categories.length) {
       console.log('Fill required fields');
       return;
     }
 
-    this.data.historyFilterData.isEnableFilter = true;
-    this.closeModal(this.data.historyFilterData);
+    this.historyFilterData.isEnableFilter = true;
+    this.closeModal(this.historyFilterData);
   }
 
-  private selectPeriod() {
-    this.data.historyFilterData.period.forEach((period: FormField) => {
-      if (period.type === this.selectedPeriod) {
-        period.checked = true;
-      }
-    });
+  selectPeriod(target, period: FormField) {
+    const { checked } = target;
+    period.checked = checked;
+
+    if (checked) {
+      this.historyFilterData.period.forEach((itemPeriod: FormField) => {
+        if (itemPeriod.type !== period.type) {
+          itemPeriod.checked = false;
+        }
+      });
+    }
   }
 }

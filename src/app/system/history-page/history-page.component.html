@@ -28,7 +28,7 @@
         <ul *ngIf="historyFilterData.period.length"
             class="history-filter-searches__block">
           <li *ngFor="let period of historyFilterData.period"
-              [hidden]="!period.checked"
+              [hidden]="!period.checked || !period.type"
               class="history-filter-searches__field">
             {{period.label}}
           </li>
@@ -48,10 +48,16 @@
   <section *ngIf="!isLoaded"></section>
 
   <section *ngIf="isLoaded">
+    <div *ngIf="historyFilterData && historyFilterData.isEnableFilter && isFilterHasNoMatch"
+         class="text-center">
+      There is no match by filter
+    </div>
+
     <acc-history-chart [data]="chartData"></acc-history-chart>
 
     <acc-history-events [categories]="categories"
-                        [events]="filteredEvents">
+                        [events]="filteredEvents"
+                        *ngIf="!isFilterHasNoMatch">
     </acc-history-events>
   </section>
 

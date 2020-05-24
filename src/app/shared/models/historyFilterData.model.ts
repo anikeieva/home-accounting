@@ -6,7 +6,7 @@ export class HistoryFilterData {
     public isEnableFilter: boolean = false,
     public eventTypes: FormField[] = [],
     public categories: Category[] = [],
-    public period?: FormField[]
+    public period: FormField[] = []
   ) {
   }
 }

@@ -35,6 +35,7 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
   filteredEvents: AccEvent[] = [];
   chartData: ChartData[] = [];
   historyFilterData: HistoryFilterData;
+  isFilterHasNoMatch = false;
 
   private static getEventsTypes(): FormField[] {
     return [
@@ -45,6 +46,7 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
 
   private static getPeriod(): FormField[] {
     return [
+      { type: '', label: 'None', checked: true },
       { type: 'd', label: 'Day', checked: false },
       { type: 'w', label: 'Week', checked: false },
       { type: 'M', label: 'Month', checked: false }
@@ -95,7 +97,7 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
               });
             });
 
-          if (checkedPeriodItem) {
+          if (checkedPeriodItem && checkedPeriodItem.type) {
             const checkedPeriod: StartOf = checkedPeriodItem.type as StartOf;
             const startDate: Moment = moment().startOf(checkedPeriod).startOf('d');
             const endDate: Moment = moment().endOf(checkedPeriod).endOf('d');
@@ -110,6 +112,7 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
           }
 
           this.getChartData();
+          this.getIsFilterHasNoMatch();
         }
       })
     );
@@ -119,7 +122,17 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
     this.initHistoryData();
 
     this.setOriginEvents();
+    this.getIsFilterHasNoMatch();
     this.getChartData();
+  }
+
+  getIsFilterHasNoMatch() {
+    if (this.historyFilterData && !this.historyFilterData.isEnableFilter) {
+      this.isFilterHasNoMatch = false;
+      return;
+    }
+
+    this.isFilterHasNoMatch = !this.filteredEvents.length;
   }
 
   ngOnDestroy(): void {
