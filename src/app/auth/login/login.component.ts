@@ -42,6 +42,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe((params: Params) => {
         if (params.canLoginNow) {
           this.getMessage('You can login now', 'success');
+        } else if (params.accessDenied) {
+          this.getMessage('You need to login to use a system ', 'warning');
         }
       })
     );

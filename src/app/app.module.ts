@@ -9,7 +9,7 @@ import { AppComponent } from './app.component';
 import { AuthModule } from './auth/auth.module';
 import { AuthService } from './shared/services/auth.service';
 import { UserService } from './shared/services/user.service';
-import { SystemModule } from './system/system.module';
+import { AuthGuard } from './shared/guards/auth.guard';
 
 @NgModule({
   declarations: [
@@ -20,13 +20,13 @@ import { SystemModule } from './system/system.module';
     AppRoutingModule,
     AuthModule,
     HttpClientModule,
-    SystemModule,
     BrowserAnimationsModule,
     MatDialogModule,
   ],
   providers: [
     UserService,
-    AuthService
+    AuthService,
+    AuthGuard
   ],
   bootstrap: [AppComponent]
 })

@@ -14,4 +14,8 @@ export class AuthService {
     this.isAuthenticated = false;
     localStorage.clear();
   }
+
+  isUserAuthorized(): boolean {
+    return this.isAuthenticated;
+  }
 }
