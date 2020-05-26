@@ -1,11 +1,12 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {combineLatest, Subscription} from 'rxjs';
-import {BillService} from '../../shared/services/bill.service';
-import {CategoriesService} from '../../shared/services/categories.service';
-import {EventsService} from '../../shared/services/events.service';
-import {Bill} from '../../shared/models/bill.model';
-import {Category} from '../../shared/models/category';
-import {AccEvent} from '../../shared/models/event.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { combineLatest, Subscription } from 'rxjs';
+import { BillService } from '../../shared/services/bill.service';
+import { CategoriesService } from '../../shared/services/categories.service';
+import { EventsService } from '../../shared/services/events.service';
+import { Bill } from '../../shared/models/bill.model';
+import { Category } from '../../shared/models/category';
+import { AccEvent } from '../../shared/models/event.model';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-planning-page',
@@ -22,8 +23,11 @@ export class PlanningPageComponent implements OnInit, OnDestroy {
   constructor(
     private billService: BillService,
     private categoriesService: CategoriesService,
-    private eventsService: EventsService
-  ) { }
+    private eventsService: EventsService,
+    private title: Title
+  ) {
+    this.title.setTitle('Planning page');
+  }
 
   ngOnInit(): void {
     this.subscriptions.push(

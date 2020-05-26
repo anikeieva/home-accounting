@@ -9,9 +9,14 @@
   </div>
 </div>
 <section class="section">
-  <div class="row" *ngIf="!isLoaded">
-    {{loadingText}}
+  <div class="row text-center"
+       *ngIf="!isLoaded">
+    <span *ngIf="failedToLoadText">
+      {{failedToLoadText}}
+    </span>
+    <acc-loader *ngIf="!failedToLoadText"></acc-loader>
   </div>
+
   <div class="row" *ngIf="isLoaded">
     <acc-bill-card [bill]="bill" [currencies]="currencies"></acc-bill-card>
     <acc-currency-card [currencies]="currencies"></acc-currency-card>

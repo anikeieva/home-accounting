@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {Category} from '../../shared/models/category';
-import {CategoriesService} from '../../shared/services/categories.service';
+import { Category } from '../../shared/models/category';
+import { CategoriesService } from '../../shared/services/categories.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-records-page',
@@ -12,8 +13,11 @@ export class RecordsPageComponent implements OnInit {
   isLoaded = false;
 
   constructor(
-    private categoriesService: CategoriesService
-  ) { }
+    private categoriesService: CategoriesService,
+    private title: Title
+  ) {
+    this.title.setTitle('Records page');
+  }
 
   ngOnInit(): void {
     this.categoriesService.getCategories()

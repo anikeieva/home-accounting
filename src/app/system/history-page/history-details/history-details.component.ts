@@ -6,6 +6,7 @@ import {CategoriesService} from '../../../shared/services/categories.service';
 import {mergeMap} from 'rxjs/operators';
 import {AccEvent} from '../../../shared/models/event.model';
 import {Category} from '../../../shared/models/category';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-history-details',
@@ -20,7 +21,10 @@ export class HistoryDetailsComponent implements OnInit, OnDestroy {
 
   constructor(private route: ActivatedRoute,
               private eventsService: EventsService,
-              private categoriesService: CategoriesService) { }
+              private categoriesService: CategoriesService,
+              private title: Title) {
+    this.title.setTitle('Event detail page');
+  }
 
   ngOnInit(): void {
     this.route.params.pipe(

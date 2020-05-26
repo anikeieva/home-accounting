@@ -7,11 +7,14 @@ import { User } from '../../shared/models/user.model';
 import { Message } from '../../shared/models/message.model';
 import { AuthService } from '../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { fadeStateTrigger } from '../../shared/animations/fade.animation';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  animations: [fadeStateTrigger]
 })
 export class LoginComponent implements OnInit, OnDestroy {
   subscriptions: Subscription[] = [];
@@ -28,8 +31,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     private userService: UserService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private title: Title
+  ) {
+    this.title.setTitle('Log in');
+  }
   loginForm: FormGroup;
   message: Message;
 

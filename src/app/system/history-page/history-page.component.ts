@@ -13,6 +13,7 @@ import { FormField } from '../../shared/models/formField.model';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import StartOf = moment.unitOfTime.StartOf;
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-history-page',
@@ -20,13 +21,6 @@ import StartOf = moment.unitOfTime.StartOf;
   styleUrls: ['./history-page.component.scss']
 })
 export class HistoryPageComponent implements OnInit, OnDestroy {
-
-  constructor(
-    private categoriesService: CategoriesService,
-    private eventsService: EventsService,
-    private dialog: MatDialog
-  ) { }
-
   subscriptions: Subscription[] = [];
   isLoaded = false;
 
@@ -36,6 +30,15 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
   chartData: ChartData[] = [];
   historyFilterData: HistoryFilterData;
   isFilterHasNoMatch = false;
+
+  constructor(
+    private categoriesService: CategoriesService,
+    private eventsService: EventsService,
+    private dialog: MatDialog,
+    private title: Title
+  ) {
+    this.title.setTitle('History page');
+  }
 
   private static getEventsTypes(): FormField[] {
     return [

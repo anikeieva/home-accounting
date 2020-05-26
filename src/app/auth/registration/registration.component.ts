@@ -6,6 +6,7 @@ import {Observable, Subscription, throwError} from 'rxjs';
 import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { catchError, map } from 'rxjs/operators';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-registration',
@@ -34,8 +35,11 @@ export class RegistrationComponent implements OnInit, OnDestroy {
 
   constructor(
     private userService: UserService,
-    private router: Router
-  ) { }
+    private router: Router,
+    private title: Title
+  ) {
+    this.title.setTitle('Sign in');
+  }
 
   ngOnInit() {
     this.registrationForm = new FormGroup({

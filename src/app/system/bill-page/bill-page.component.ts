@@ -4,6 +4,7 @@ import {CurrencyInfoMonobank} from '../../shared/models/currencyInfoMonobank';
 import {combineLatest, Subscription} from 'rxjs';
 import {Bill} from '../../shared/models/bill.model';
 import {Currency} from '../../shared/models/currency.model';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'acc-bill-page',
@@ -14,7 +15,7 @@ export class BillPageComponent implements OnInit, OnDestroy {
   subscription: Subscription[] = [];
   bill: Bill;
   isLoaded = false;
-  loadingText = 'Loading...';
+  failedToLoadText = '';
 
   currencyCodesAByName = {
     UAH: 980,
@@ -33,8 +34,11 @@ export class BillPageComponent implements OnInit, OnDestroy {
   };
 
   constructor(
-    private  billService: BillService
-  ) { }
+    private  billService: BillService,
+    private title: Title
+  ) {
+    this.title.setTitle('Bill page');
+  }
 
   ngOnInit(): void {
     this.subscription.push(
@@ -94,6 +98,6 @@ export class BillPageComponent implements OnInit, OnDestroy {
 
   private ifCurrenciesRejected(errorMessage: string) {
     this.isLoaded = false;
-    this.loadingText = errorMessage ? errorMessage + '. Try again in a minute' : 'Try again in a minute';
+    this.failedToLoadText = errorMessage ? errorMessage + '. Try again in a minute' : 'Try again in a minute';
   }
 }

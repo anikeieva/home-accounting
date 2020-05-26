@@ -1,6 +1,6 @@
 <p class="text-xs-center">Login for work</p>
 
-<div *ngIf="message && message.text"
+<div @fade *ngIf="message && message.text"
      class="alert alert-{{message.type}}"
 >
   {{message.text}}
