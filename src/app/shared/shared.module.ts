@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MomentPipe } from './pipes/moment.pipe';
 import { SearchFilterPipe } from './pipes/search-filter.pipe';
+import { LoaderComponent } from './components/loader/loader.component';
 
 @NgModule({
   imports: [
@@ -14,8 +15,13 @@ import { SearchFilterPipe } from './pipes/search-filter.pipe';
     ReactiveFormsModule,
     FormsModule,
     MomentPipe,
-    SearchFilterPipe
+    SearchFilterPipe,
+    LoaderComponent
   ],
-  declarations: [MomentPipe, SearchFilterPipe]
+  declarations: [
+    MomentPipe,
+    SearchFilterPipe,
+    LoaderComponent
+  ]
 })
 export class SharedModule { }
