@@ -1,33 +1,23 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {BillService} from '../../shared/services/bill.service';
-import {CurrencyInfoMonobank} from '../../shared/models/currencyInfoMonobank';
-import {combineLatest, Subscription} from 'rxjs';
-import {Bill} from '../../shared/models/bill.model';
-import {Currency} from '../../shared/models/currency.model';
+import { Component, OnInit } from '@angular/core';
+import { BillService } from '../../shared/services/bill.service';
+import { CurrencyInfoMonobank } from '../../shared/models/currencyInfoMonobank';
+import { combineLatest, Subscription } from 'rxjs';
+import { Bill } from '../../shared/models/bill.model';
+import { Currency } from '../../shared/models/currency.model';
 import { Title } from '@angular/platform-browser';
+import { CommonComponent } from '../../shared/components/message/common.component';
+import { currencyCodesA, currencyCodesAByName } from '../../shared/data/data';
 
 @Component({
   selector: 'acc-bill-page',
   templateUrl: './bill-page.component.html',
   styleUrls: ['./bill-page.component.scss']
 })
-export class BillPageComponent implements OnInit, OnDestroy {
+export class BillPageComponent extends CommonComponent implements OnInit {
   subscription: Subscription[] = [];
   bill: Bill;
   isLoaded = false;
   failedToLoadText = '';
-
-  currencyCodesAByName = {
-    UAH: 980,
-    USD: 840,
-    EUR: 978
-  };
-
-  currencyCodesA = {
-    980: 'UAH',
-    840: 'USD',
-    978: 'EUR'
-  };
 
   currencies: {
     [key: string]: Currency
@@ -37,6 +27,7 @@ export class BillPageComponent implements OnInit, OnDestroy {
     private  billService: BillService,
     private title: Title
   ) {
+    super();
     this.title.setTitle('Bill page');
   }
 
@@ -62,10 +53,10 @@ export class BillPageComponent implements OnInit, OnDestroy {
 
     if (currenciesMonobank) {
       currenciesMonobank.forEach((currency: CurrencyInfoMonobank) => {
-        if (currency && currency.currencyCodeB === this.currencyCodesAByName.UAH &&
-          (currency.currencyCodeA === this.currencyCodesAByName.USD ||
-            currency.currencyCodeA === this.currencyCodesAByName.EUR)) {
-          const currencyName: string = this.currencyCodesA[currency.currencyCodeA];
+        if (currency && currency.currencyCodeB === currencyCodesAByName.UAH &&
+          (currency.currencyCodeA === currencyCodesAByName.USD ||
+            currency.currencyCodeA === currencyCodesAByName.EUR)) {
+          const currencyName: string = currencyCodesA[currency.currencyCodeA];
           const rate: number = currency.rateCross || (currency.rateBuy + currency.rateSell) / 2;
           const date: Date = (currency.date && new Date(currency.date * 1000)) || new Date();
 
@@ -88,12 +79,6 @@ export class BillPageComponent implements OnInit, OnDestroy {
           this.isLoaded = true;
         }, this.ifCurrenciesRejected.bind(this))
     );
-  }
-
-  ngOnDestroy() {
-    this.subscription.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
   }
 
   private ifCurrenciesRejected(errorMessage: string) {

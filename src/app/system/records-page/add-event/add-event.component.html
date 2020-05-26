@@ -5,10 +5,7 @@
     </div>
   </div>
   <div class="card-block">
-    <div *ngIf="message && message.text"
-         class="alert alert-{{message.type}}">
-      {{message.text}}
-    </div>
+    <acc-alert-message [message]="message"></acc-alert-message>
 
     <form #form="ngForm" (ngSubmit)="onSubmit(form)">
       <div class="form-group">

@@ -1,19 +1,20 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {ActivatedRoute, Params} from '@angular/router';
-import {EventsService} from '../../../shared/services/events.service';
-import {CategoriesService} from '../../../shared/services/categories.service';
-import {mergeMap} from 'rxjs/operators';
-import {AccEvent} from '../../../shared/models/event.model';
-import {Category} from '../../../shared/models/category';
+import { ActivatedRoute, Params } from '@angular/router';
+import { EventsService } from '../../../shared/services/events.service';
+import { CategoriesService } from '../../../shared/services/categories.service';
+import { mergeMap } from 'rxjs/operators';
+import { AccEvent } from '../../../shared/models/event.model';
+import { Category } from '../../../shared/models/category';
 import { Title } from '@angular/platform-browser';
+import { CommonComponent } from '../../../shared/components/message/common.component';
 
 @Component({
   selector: 'acc-history-details',
   templateUrl: './history-details.component.html',
   styleUrls: ['./history-details.component.scss']
 })
-export class HistoryDetailsComponent implements OnInit, OnDestroy {
+export class HistoryDetailsComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
   event: AccEvent;
   category: Category;
@@ -23,6 +24,7 @@ export class HistoryDetailsComponent implements OnInit, OnDestroy {
               private eventsService: EventsService,
               private categoriesService: CategoriesService,
               private title: Title) {
+    super();
     this.title.setTitle('Event detail page');
   }
 
@@ -41,11 +43,4 @@ export class HistoryDetailsComponent implements OnInit, OnDestroy {
       this.isLoaded = true;
     });
   }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-  }
-
 }

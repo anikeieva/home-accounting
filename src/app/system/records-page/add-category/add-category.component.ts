@@ -1,23 +1,26 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {NgForm, NgModel} from '@angular/forms';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
 
-import {Category} from '../../../shared/models/category';
-import {CategoriesService} from '../../../shared/services/categories.service';
-import {Subscription} from 'rxjs';
+import { Category } from '../../../shared/models/category';
+import { CategoriesService } from '../../../shared/services/categories.service';
+import { Subscription } from 'rxjs';
+import { CommonComponent } from '../../../shared/components/message/common.component';
 
 @Component({
   selector: 'acc-add-category',
   templateUrl: './add-category.component.html',
   styleUrls: ['./add-category.component.scss']
 })
-export class AddCategoryComponent implements OnInit, OnDestroy {
+export class AddCategoryComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
 
   @Output() addNewCategory = new EventEmitter<Category>();
 
   constructor(
     private categoriesService: CategoriesService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
   }
@@ -47,11 +50,5 @@ export class AddCategoryComponent implements OnInit, OnDestroy {
           this.addNewCategory.emit(categoryFromResponse);
         })
     );
-  }
-
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
   }
 }

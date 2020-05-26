@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import {Observable, Subscription, throwError} from 'rxjs';
@@ -7,13 +7,14 @@ import { UserService } from '../../shared/services/user.service';
 import { User } from '../../shared/models/user.model';
 import { catchError, map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
+import { CommonComponent } from '../../shared/components/message/common.component';
 
 @Component({
   selector: 'acc-registration',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss']
 })
-export class RegistrationComponent implements OnInit, OnDestroy {
+export class RegistrationComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
   registrationForm: FormGroup;
 
@@ -38,6 +39,7 @@ export class RegistrationComponent implements OnInit, OnDestroy {
     private router: Router,
     private title: Title
   ) {
+    super();
     this.title.setTitle('Sign in');
   }
 
@@ -75,11 +77,4 @@ export class RegistrationComponent implements OnInit, OnDestroy {
         catchError((error: Error) => throwError(error))
       );
   }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-  }
-
 }

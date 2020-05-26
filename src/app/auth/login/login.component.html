@@ -1,48 +1,38 @@
-<p class="text-xs-center">Login for work</p>
+<p class="text-xs-center">Log in for work</p>
 
-<div @fade *ngIf="message && message.text"
-     class="alert alert-{{message.type}}"
->
-  {{message.text}}
-</div>
+<acc-alert-message [message]="message"></acc-alert-message>
 
 <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
   <div
     class="form-group"
-    [ngClass]="{'has-error': email.invalid && email.touched}"
-  >
+    [ngClass]="{'has-error': email.invalid && email.touched}">
     <label for="email">Email</label>
     <input
       type="text"
       class="form-control underlined"
       id="email"
       placeholder="Enter your email"
-      formControlName="email"
-    >
+      formControlName="email">
     <span
       class="form-help-text"
-      *ngIf="email.invalid && email.touched"
-    >
+      *ngIf="email.invalid && email.touched">
       <span *ngIf="email.errors.required">Email can not be empty</span>
       <span *ngIf="email.errors.email">Enter correct email</span>
     </span>
   </div>
   <div
     class="form-group"
-    [ngClass]="{'has-error': password.invalid && password.touched}"
-  >
+    [ngClass]="{'has-error': password.invalid && password.touched}">
     <label for="password">Password</label>
     <input
       type="password"
       class="form-control underlined"
       id="password"
       placeholder="Password"
-      formControlName="password"
-    >
+      formControlName="password">
     <span
       class="form-help-text"
-      *ngIf="password.invalid && password.touched"
-    >
+      *ngIf="password.invalid && password.touched">
       <span *ngIf="password.errors.required">Password can not be empty</span>
       <span *ngIf="password.errors.minlength && password.errors.minlength.requiredLength">
         Password should be at least
@@ -56,8 +46,7 @@
   <div class="form-group">
     <button type="submit"
             class="btn btn-block btn-primary"
-            [disabled]="loginForm.invalid"
-    >
+            [disabled]="loginForm.invalid">
       Login
     </button>
   </div>

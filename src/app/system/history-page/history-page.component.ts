@@ -1,26 +1,30 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { combineLatest, Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
 
 import { Category } from '../../shared/models/category';
 import { AccEvent } from '../../shared/models/event.model';
 import { CategoriesService } from '../../shared/services/categories.service';
 import { EventsService } from '../../shared/services/events.service';
 import { ChartData } from '../../shared/models/chartData';
+
 import { HistoryFilterComponent } from './history-filter/history-filter.component';
 import { HistoryFilterData } from '../../shared/models/historyFilterData.model';
 import { FormField } from '../../shared/models/formField.model';
-import * as moment from 'moment';
 import { Moment } from 'moment';
+import { CommonComponent } from '../../shared/components/message/common.component';
+
+import * as moment from 'moment';
 import StartOf = moment.unitOfTime.StartOf;
-import { Title } from '@angular/platform-browser';
+import { EventsTypes, EventPeriod } from '../../shared/data/data';
 
 @Component({
   selector: 'acc-history-page',
   templateUrl: './history-page.component.html',
   styleUrls: ['./history-page.component.scss']
 })
-export class HistoryPageComponent implements OnInit, OnDestroy {
+export class HistoryPageComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
   isLoaded = false;
 
@@ -37,23 +41,8 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
     private dialog: MatDialog,
     private title: Title
   ) {
+    super();
     this.title.setTitle('History page');
-  }
-
-  private static getEventsTypes(): FormField[] {
-    return [
-      { type: 'outcome', label: 'Outcome', checked: false },
-      { type: 'income', label: 'Income', checked: false }
-    ];
-  }
-
-  private static getPeriod(): FormField[] {
-    return [
-      { type: '', label: 'None', checked: true },
-      { type: 'd', label: 'Day', checked: false },
-      { type: 'w', label: 'Week', checked: false },
-      { type: 'M', label: 'Month', checked: false }
-    ];
   }
 
   ngOnInit(): void {
@@ -83,35 +72,14 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
         }
       }).afterClosed().subscribe((historyFilterData: HistoryFilterData) => {
         if (historyFilterData) {
+          const checkedPeriodItem: FormField = historyFilterData.period.find((period: FormField) => period.checked);
           this.historyFilterData = historyFilterData;
-          console.log(historyFilterData);
           this.setOriginEvents();
 
-          const checkedPeriodItem: FormField = historyFilterData.period.find((period: FormField) => period.checked);
-
-          this.filteredEvents = this.filteredEvents.filter((event: AccEvent) => {
-            return historyFilterData.eventTypes.some((eventTypeFromFilter: FormField) => {
-              return eventTypeFromFilter.checked && eventTypeFromFilter.type === event.type;
-            });
-          })
-            .filter((event: AccEvent) => {
-              return historyFilterData.categories.some((categoryFromFilter: Category) => {
-                return categoryFromFilter.checked && +categoryFromFilter.id === event.category;
-              });
-            });
+          this.filteredEvents = this.getFilteredEvents(historyFilterData, this.filteredEvents);
 
           if (checkedPeriodItem && checkedPeriodItem.type) {
-            const checkedPeriod: StartOf = checkedPeriodItem.type as StartOf;
-            const startDate: Moment = moment().startOf(checkedPeriod).startOf('d');
-            const endDate: Moment = moment().endOf(checkedPeriod).endOf('d');
-
-            if (startDate && endDate) {
-              this.filteredEvents = this.filteredEvents.filter((event: AccEvent) => {
-                const eventDate: Moment = moment(event.date, 'DD.MM.YYYY HH.mm.ss');
-
-                return eventDate.isBetween(startDate, endDate);
-              });
-            }
+            this.filteredEvents = this.getFilteredEventForTimePeriod(historyFilterData, this.filteredEvents);
           }
 
           this.getChartData();
@@ -138,10 +106,38 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
     this.isFilterHasNoMatch = !this.filteredEvents.length;
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
+  private getFilteredEvents(historyFilterData: HistoryFilterData, filteredEvents: AccEvent[]) {
+    return filteredEvents.filter((event: AccEvent) => {
+      return historyFilterData.eventTypes.some((eventTypeFromFilter: FormField) => {
+        return eventTypeFromFilter.checked && eventTypeFromFilter.type === event.type;
+      });
+    }).filter((event: AccEvent) => {
+      return historyFilterData.categories.some((categoryFromFilter: Category) => {
+        return categoryFromFilter.checked && +categoryFromFilter.id === event.category;
+      });
     });
+  }
+
+  private getFilteredEventForTimePeriod(historyFilterData: HistoryFilterData, filteredEvents: AccEvent[]) {
+    const checkedPeriodItem: FormField = historyFilterData.period.find((period: FormField) => period.checked);
+
+    if (checkedPeriodItem && checkedPeriodItem.type) {
+      const checkedPeriod: StartOf = checkedPeriodItem.type as StartOf;
+      const startDate: Moment = moment().startOf(checkedPeriod).startOf('d');
+      const endDate: Moment = moment().endOf(checkedPeriod).endOf('d');
+
+      if (startDate && endDate) {
+        return filteredEvents.filter((event: AccEvent) => {
+          const eventDate: Moment = moment(event.date, 'DD.MM.YYYY HH.mm.ss');
+
+          return eventDate.isBetween(startDate, endDate);
+        });
+      } else {
+        return filteredEvents;
+      }
+    } else {
+      return filteredEvents;
+    }
   }
 
   private initHistoryData() {
@@ -152,8 +148,8 @@ export class HistoryPageComponent implements OnInit, OnDestroy {
       category.checked = false;
     });
 
-    this.historyFilterData.eventTypes =  HistoryPageComponent.getEventsTypes();
-    this.historyFilterData.period =  HistoryPageComponent.getPeriod();
+    this.historyFilterData.eventTypes =  EventsTypes;
+    this.historyFilterData.period =  EventPeriod;
   }
 
 

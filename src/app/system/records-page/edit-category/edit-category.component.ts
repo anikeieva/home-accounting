@@ -1,17 +1,19 @@
-import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
-import {NgForm, NgModel} from '@angular/forms';
-import {Subscription} from 'rxjs';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { NgForm, NgModel } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
-import {Category} from '../../../shared/models/category';
-import {CategoriesService} from '../../../shared/services/categories.service';
-import {Message} from '../../../shared/models/message.model';
+import { Category } from '../../../shared/models/category';
+import { CategoriesService } from '../../../shared/services/categories.service';
+import { Message } from '../../../shared/models/message.model';
+import { MessageType } from '../../../shared/models/messageType';
+import { CommonComponent } from '../../../shared/components/message/common.component';
 
 @Component({
   selector: 'acc-edit-category',
   templateUrl: './edit-category.component.html',
   styleUrls: ['./edit-category.component.scss']
 })
-export class EditCategoryComponent implements OnInit, OnDestroy {
+export class EditCategoryComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
 
   @Input() categories: Category[] = [];
@@ -23,7 +25,9 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
 
   constructor(
     private categoriesService: CategoriesService
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.onCategoryChange();
@@ -52,27 +56,13 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     this.currentCategory = new Category(currentCategory.name, currentCategory.limit);
   }
 
-  ngOnDestroy() {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-  }
-
   private updateCategory(form: NgForm, category: Category) {
     this.subscriptions.push(
       this.categoriesService.updateCategory(category)
         .subscribe((categoryFromResponse: Category) => {
           this.editNewCategory.emit(categoryFromResponse);
-          this.addMessage('success', 'Category was edited');
+          this.getMessage('Category was edited', MessageType.success);
         })
     );
-  }
-
-  private addMessage(type, text) {
-    this.message = new Message(type, text);
-
-    setTimeout(() => {
-      this.message.text = '';
-    }, 3000);
   }
 }

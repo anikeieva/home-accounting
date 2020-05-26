@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { combineLatest, Subscription } from 'rxjs';
 import { BillService } from '../../shared/services/bill.service';
 import { CategoriesService } from '../../shared/services/categories.service';
@@ -7,13 +7,15 @@ import { Bill } from '../../shared/models/bill.model';
 import { Category } from '../../shared/models/category';
 import { AccEvent } from '../../shared/models/event.model';
 import { Title } from '@angular/platform-browser';
+import { MessageType } from '../../shared/models/messageType';
+import { CommonComponent } from '../../shared/components/message/common.component';
 
 @Component({
   selector: 'acc-planning-page',
   templateUrl: './planning-page.component.html',
   styleUrls: ['./planning-page.component.scss']
 })
-export class PlanningPageComponent implements OnInit, OnDestroy {
+export class PlanningPageComponent extends CommonComponent implements OnInit {
   subscriptions: Subscription[] = [];
   isLoaded = false;
   bill: Bill;
@@ -26,6 +28,7 @@ export class PlanningPageComponent implements OnInit, OnDestroy {
     private eventsService: EventsService,
     private title: Title
   ) {
+    super();
     this.title.setTitle('Planning page');
   }
 
@@ -55,19 +58,13 @@ export class PlanningPageComponent implements OnInit, OnDestroy {
     }, 0);
   }
 
-  ngOnDestroy(): void {
-    this.subscriptions.forEach((subscription: Subscription) => {
-      subscription.unsubscribe();
-    });
-  }
-
   getPercentString(category: Category): string {
     return this.getCategoryPercent(category) + '%';
   }
 
   getCategoryClassColor(category: Category): string {
     const percent: number = this.getCategoryPercent(category);
-    return percent < 60 ? 'success' : percent >= 100 ? 'danger' : 'warning';
+    return percent < 60 ? MessageType.success : percent >= 100 ? MessageType.danger : MessageType.warning;
   }
 
   private getCategoryPercent(category: Category): number {
